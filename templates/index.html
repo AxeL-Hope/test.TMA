@@ -44,22 +44,42 @@
     <button onclick="sendButton(2)">Button 2</button>
 </div>
 
-    <script>
-        Telegram.WebApp.ready();
+<script>
+    Telegram.WebApp.ready();
 
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        console.log("User info:", user);
-        console.log("User id info:", user.id);
-        function sendButton(buttonNumber) {
-            fetch(`/button/${buttonNumber}`, { method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user.id })
-            })
-            .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+    let initDataUnsafe = Telegram.WebApp.initDataUnsafe || null;
+    let userId = initDataUnsafe && initDataUnsafe.user ? initDataUnsafe.user.id : null;
+
+    if (!initDataUnsafe) {
+        initDataUnsafe = null;
+    }
+
+    if (!userId) {
+        userId = null;
+    }
+
+    function sendButton(buttonNumber) {
+        fetch(`/button/${buttonNumber}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, initDataUnsafe })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 
 </body>
 </html>
