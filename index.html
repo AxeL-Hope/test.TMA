@@ -43,23 +43,23 @@
     <button onclick="sendButton(1)">Button 1</button>
     <button onclick="sendButton(2)">Button 2</button>
 </div>
-    
-<script>
-    Telegram.WebApp.ready();
-    
-    const user = Telegram.WebApp.initDataUnsafe.user;
-    console.log("User info:", user);
-    function sendButton(buttonNumber) {
-        fetch(`http://localhost:8000/button/${buttonNumber}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: user.id })
-        })
-        .then(response => response.text())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
-    }
-</script>
+
+    <script>
+        Telegram.WebApp.ready();
+
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        console.log("User info:", user);
+        console.log("User id info:", user.id);
+        function sendButton(buttonNumber) {
+            fetch(`/button/${buttonNumber}`, { method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user.id })
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 
 </body>
 </html>
