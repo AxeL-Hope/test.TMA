@@ -44,21 +44,22 @@
     <button onclick="sendButton(2)">Button 2</button>
 </div>
     
-    <script>
-        Telegram.WebApp.ready();
+<script>
+    Telegram.WebApp.ready();
     
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        console.log("User info:", user);
-        function sendButton(buttonNumber) {
-            fetch(`/button/${buttonNumber}`, { method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: user.id })
-            })
-            .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+    const user = Telegram.WebApp.initDataUnsafe.user;
+    console.log("User info:", user);
+    function sendButton(buttonNumber) {
+        fetch(`http://127.0.0.1:5000/button/${buttonNumber}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: user.id })
+        })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 
 </body>
 </html>
